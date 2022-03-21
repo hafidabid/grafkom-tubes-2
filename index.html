@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <script src="objdata.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <main>
+        <div class="interactive-button">
+            <div class="translation">
+                <p>Translasi objek</p>
+                <div class="slider">
+                    <label for="x-translation">x</label>
+                    <input type="range" min=-1 max=1 step=0.001 value=0 name="x-translation" id="x-translation">
+                    <output>0</output>
+                </div>
+                <div class="slider">
+                    <label for="y-translation">y</label>
+                    <input type="range" min=-1 max=1 step=0.001 value=0 name="y-translation" id="y-translation">
+                    <output>0</output>
+                </div>
+                <div class="slider">
+                    <label for="z-translation">z</label>
+                    <input type="range" min=-1 max=1 step=0.001 value=0 name="z-translation" id="z-translation">
+                    <output>0</output>
+                </div>
+            </div>
+            <div class="rotation">
+                <p>Rotasi objek</p>
+                <div class="slider">
+                    <label for="x-rotation">x-axis</label>
+                    <input type="range" min=0 max=360 value=70 name="x-rotation" id="x-rotation">
+                    <output>70</output>
+                </div>
+                <div class="slider">
+                    <label for="y-rotation">y-axis</label>
+                    <input type="range" min=0 max=360 value=10 name="y-rotation" id="y-rotation">
+                    <output>10</output>
+                </div>
+                <div class="slider">
+                    <label for="z-rotation">z-axis</label>
+                    <input type="range" min=0 max=360 value=0 name="z-rotation" id="z-rotation">
+                    <output>0</output>
+                </div>
+            </div>
+            <div class="scaling">
+                <p>Scale</p>
+                <div class="slider">
+                    <label for="x-scale">scale-x</label>
+                    <input type="range" min=0 max=5 step=0.01 value=1 name="x-scale" id="x-scale">
+                    <output>1</output>
+                </div>
+                <div class="slider">
+                    <label for="y-scale">scale-y</label>
+                    <input type="range" min=0 max=5 step=0.01 value=1 name="y-scale" id="y-scale">
+                    <output>1</output>
+                </div>
+                <div class="slider">
+                    <label for="z-scale">scale-z</label>
+                    <input type="range" min=0 max=5 step=0.01 value=1 name="z-scale" id="z-scale">
+                    <output>1</output>
+                </div>
+            </div>
+
+            <input type="file" value="inputFile" id="inputFile" name="inputFile">
+            <button>reset to default</button>
+        </div>
+        <canvas id="canvas" width="750" height="750"></canvas>
+        <!-- vertex shader -->
+        <script  id="vertex" type="x-shader/x-vertex">
+            attribute vec4 a_position;
+            
+            uniform mat4 u_matrix;
+            
+            void main() {
+                // Multiply the position by the matrix.
+                gl_Position = u_matrix * a_position;
+            }
+        </script>
+        <!-- fragment shader -->
+        <script  id="fragment" type="x-shader/x-fragment">
+            precision mediump float;
+
+            varying vec3 v_normal;
+            
+            uniform vec3 u_reverseLightDirection;
+            uniform vec4 u_color;
+
+            void main()
+            {
+                vec3 normal = normalize(v_normal);
+
+                float light = dot(normal, u_reverseLightDirection);
+
+                gl_FragColor = u_color;
+
+                gl_FragColor.rgb *= light;
+            }
+        </script>
+    </main>
+</body>
+</html>
