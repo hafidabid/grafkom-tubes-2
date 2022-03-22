@@ -1,3 +1,10 @@
+let canvas = document.getElementById("canvas");
+let gl;
+let matrixLocation;
+let normalAttLoc;
+
+let program;
+
 const shaderSource = {
     "fragment" : `
     precision mediump float;
@@ -67,4 +74,40 @@ function createProgram(gl, vertex, fragment){
  
   console.log(gl.getProgramInfoLog(program));
   gl.deleteProgram(program);
+}
+function initEngine(){
+    gl = canvas.getContext("webgl");
+    if (!gl) {
+        alert("Not supported");
+    }
+
+    let vertexShader =  createShader(gl, gl.VERTEX_SHADER, shaderSource.vertex);
+    let fragmentShader =  createShader(gl, gl.FRAGMENT_SHADER, shaderSource.fragment);
+
+    program = createProgram(gl, vertexShader, fragmentShader);
+    gl.useProgram(program);
+
+    let posBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    
+    let posAttLoc = gl.getAttribLocation(program, "a_position");
+    normalAttLoc = gl.getAttribLocation(program, "a_normal");
+    matrixLocation = gl.getUniformLocation(program, "u_matrix");
+    
+    gl.enableVertexAttribArray(posAttLoc);
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+    gl.vertexAttribPointer(posAttLoc, 3, gl.FLOAT, false, 0, 0);
+    
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    
+    resizeCanvas(canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    renderEngine();
+}
+
+function renderEngine(){
+
 }

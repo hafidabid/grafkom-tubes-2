@@ -1,9 +1,3 @@
-let canvas = document.getElementById("canvas");
-let gl;
-let matrixLocation;
-let normalAttLoc;
-
-let program;
 
 let x_translation = document.getElementById("x-translation");
 let y_translation = document.getElementById("y-translation");
@@ -75,75 +69,12 @@ z_scaling.oninput = function(){
     render();
 }
 
-let colors = [];
-
-function colorPicker(){
-    return "#ff00bf";
-}
-
-// convert hex values to rgb
-function hexToRgb(hex){
-    let g = parseInt(hex.slice(3, 5), 16);
-    let r = parseInt(hex.slice(1, 3), 16);
-    let b = parseInt(hex.slice(5, 7), 16);
-
-    r = normalizeRGB(r);
-    g = normalizeRGB(g);
-    b = normalizeRGB(b);
-
-    return {r, g, b};
-}
-
-// convert rgb (0-255) to (0-1)
-function normalizeRGB(c){
-    return ((c-255)/255)+1;
-}
-
-function initColor(){
-    const  rgb = hexToRgb(colorPicker());
-    colors.push(rgb.r, rgb.g, rgb.b, 1);    
-}
 
 function updateColor(){
     colors = [];
 
     const  rgb = hexToRgb(colorPicker());
     colors.push(rgb.r, rgb.g, rgb.b, 1);
-
-    render();
-}
-
-function init(){
-    gl = canvas.getContext("webgl");
-    if (!gl) {
-        alert("Not supported");
-    }
-
-    let vertexShader =  createShader(gl, gl.VERTEX_SHADER, shaderSource.vertex);
-    let fragmentShader =  createShader(gl, gl.FRAGMENT_SHADER, shaderSource.fragment);
-
-    program = createProgram(gl, vertexShader, fragmentShader);
-    gl.useProgram(program);
-
-    let posBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-    
-    let posAttLoc = gl.getAttribLocation(program, "a_position");
-    normalAttLoc = gl.getAttribLocation(program, "a_normal");
-    matrixLocation = gl.getUniformLocation(program, "u_matrix");
-    
-    gl.enableVertexAttribArray(posAttLoc);
-    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-    gl.vertexAttribPointer(posAttLoc, 3, gl.FLOAT, false, 0, 0);
-    
-    gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    
-    resizeCanvas(canvas);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    
-    initColor();
 
     render();
 }
@@ -168,6 +99,11 @@ function render(){
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     let matrix = createM4Identity();
+    console.log("on render", {
+        t: translation,
+        r: rotation,
+        s: z_scaling
+    })
     matrix = translateM4(matrix, translation[0], translation[1], translation[2]);
     matrix = rotateM4x(matrix, rotation[0]);
     matrix = rotateM4y(matrix, rotation[1]);
@@ -346,4 +282,4 @@ function degreeToRadian(deg){
     return deg * (Math.PI/80) 
 }
 
-window.onload = init;
+initEngine()
