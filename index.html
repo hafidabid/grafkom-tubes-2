@@ -7,6 +7,7 @@
     <title>WebGL</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <script src="objdata.js" defer></script>
+    <script src="engine.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
@@ -71,37 +72,7 @@
             <button>reset to default</button>
         </div>
         <canvas id="canvas" width="750" height="750"></canvas>
-        <!-- vertex shader -->
-        <script  id="vertex" type="x-shader/x-vertex">
-            attribute vec4 a_position;
-            
-            uniform mat4 u_matrix;
-            
-            void main() {
-                // Multiply the position by the matrix.
-                gl_Position = u_matrix * a_position;
-            }
-        </script>
-        <!-- fragment shader -->
-        <script  id="fragment" type="x-shader/x-fragment">
-            precision mediump float;
-
-            varying vec3 v_normal;
-            
-            uniform vec3 u_reverseLightDirection;
-            uniform vec4 u_color;
-
-            void main()
-            {
-                vec3 normal = normalize(v_normal);
-
-                float light = dot(normal, u_reverseLightDirection);
-
-                gl_FragColor = u_color;
-
-                gl_FragColor.rgb *= light;
-            }
-        </script>
+        
     </main>
 </body>
 </html>
