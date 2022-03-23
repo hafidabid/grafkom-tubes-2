@@ -81,24 +81,45 @@ isUsingShader.onchange = (e) => {
 }
 
 
+function resetAdapter(components, value){
+    components.value = value
+    components.nextElementSibling.value = value
+}
+
 function resetButton(){
     cameraValue[0] = 0
     cameraValue[1] = 200
+    resetAdapter(angleSlider, 0)
+    resetAdapter(radiusSlider, 200)
 
     translation[0] = 90
     translation[1] = 150
     translation[2] = 0
+    resetAdapter(xTranslation, 90)
+    resetAdapter(yTranslation, 150)
+    resetAdapter(zTranslation, 0)
 
     rotation[0] = 40
     rotation[1] = 25
     rotation[2] = 325
+    resetAdapter(xRotation, 40)
+    resetAdapter(yRotation, 25)
+    resetAdapter(zRotation, 325)
 
     scale[0] = 1
     scale[1] = 1
     scale[2] = 1
+    resetAdapter(xScaling, 1)
+    resetAdapter(yScaling, 1)
+    resetAdapter(zScaling, 1)
 
     projectionMode = "orthograpic"
     projAttr.fov = 60
     projAttr.obangel = 63.4
+    selectMode.value = "orthograpic"
+    prespectiveDiv[0].style.visibility="hidden"
+    obliqueDiv[0].style.visibility="hidden"
+
+    isUsingShader.checked = false
     renderEngine()
 }
