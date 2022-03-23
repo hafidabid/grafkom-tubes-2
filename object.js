@@ -1,4 +1,4 @@
-points = [
+let points = [
      // left column front
      0,   0,  0,
      0, 150,  0,
@@ -16,12 +16,7 @@ points = [
      100,   0,  0,
 
      // middle rung front
-     30,  60,  0,
-     30,  90,  0,
-     67,  60,  0,
-     30,  90,  0,
-     67,  90,  0,
-     67,  60,  0,
+     
 
      // left column back
        0,   0,  30,
@@ -128,7 +123,7 @@ points = [
      0, 150,   0
 ]
 
-colors = [
+let colors = [
       // left column front
       200,  70, 120,
       200,  70, 120,
@@ -258,7 +253,7 @@ colors = [
       160, 160, 220
 ]
 
-normals = [
+let normals = [
    // left column front
    0, 0, 1,
    0, 0, 1,
@@ -388,4 +383,4 @@ normals = [
    -1, 0, 0
 ]
 
-uniColor = [0.2, 1, 0.2, 1]
+uniColor = [0.1, 0.76666, 0.8, 1]
