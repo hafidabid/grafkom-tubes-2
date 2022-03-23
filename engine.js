@@ -2,43 +2,38 @@ let canvas = document.getElementById("canvas");
 let gl;
 let matrixLocation;
 let normalAttLoc;
-
+let posAttLoc
 let program;
+let posBuffer
+let colorBuffer
 
 const shaderSource = {
     "fragment" : `
-    precision mediump float;
+        precision mediump float;
 
-    varying vec3 v_normal;
-    
-    uniform vec3 u_reverseLightDirection;
-    uniform vec4 u_color;
+        // Passed in from the vertex shader.
+        varying vec4 v_color;
 
-    void main()
-    {
-        vec3 normal = normalize(v_normal);
-
-        float light = dot(normal, u_reverseLightDirection);
-
-        gl_FragColor = u_color;
-
-        gl_FragColor.rgb *= light;
-    }
+        void main() {
+            gl_FragColor = v_color;
+        }
         `,
     
     "vertex" : `
-    attribute  vec4 a_position;
-    attribute  vec3 a_normal;
+        attribute vec4 a_position;
+        attribute vec4 a_color;
 
-    uniform mat4 u_matrix;
+        uniform mat4 u_matrix;
 
-    varying vec3 v_normal;
+        varying vec4 v_color;
 
-    void main()
-    {
+        void main() {
+        // Multiply the position by the matrix.
         gl_Position = u_matrix * a_position;
-        v_normal =  a_normal;
-    }
+
+        // Pass the color to the fragment shader.
+        v_color = a_color;
+        }
     `
 
 }
@@ -89,9 +84,9 @@ function createProgram(gl, vertex, fragment){
 
     // return program;
     var success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  if (success) {
-    return program;
-  }
+    if (success) {
+        return program
+    }
  
   console.log(gl.getProgramInfoLog(program));
   gl.deleteProgram(program);
@@ -104,55 +99,54 @@ function initEngine(){
     let vertexShader =  createShader(gl, gl.VERTEX_SHADER, shaderSource.vertex);
     let fragmentShader =  createShader(gl, gl.FRAGMENT_SHADER, shaderSource.fragment);
 
+    //setup program
     program = createProgram(gl, vertexShader, fragmentShader);
-    gl.useProgram(program);
     
-    let posAttLoc = gl.getAttribLocation(program, "a_position");
-    normalAttLoc = gl.getAttribLocation(program, "a_normal");
+    //lookup vertex and uniform data
+    posAttLoc = gl.getAttribLocation(program, "a_position");
     matrixLocation = gl.getUniformLocation(program, "u_matrix");
     
-    let posBuffer = gl.createBuffer();
+    //create position buffer and set position geometry
+    posBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+    //create color buffer and set color on each geometry
+    colorBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+    gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW)
+
+    renderEngine();
+}
+
+function renderEngine(){
+    resizeCanvas(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+
+    gl.useProgram(program)
 
     gl.enableVertexAttribArray(posAttLoc);
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
     gl.vertexAttribPointer(posAttLoc, 3, gl.FLOAT, false, 0, 0);
-    
-    gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    resizeCanvas(gl.canvas);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling);
-    //render()
-}
-
-function renderEngine(gl, program, normalArr, normalAtl, colorArr, trans, rotate, scale){
-    const norm = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, norm)
-    gl.bufferData(gl.ARRAY_BUFFER, normalArr, gl.STATIC_DRAW)
-
-    gl.enableVertexAttribArray(normalAtl)
-    gl.bindBuffer(gl.ARRAY_BUFFER, norm)
-    gl.vertexAttribPointer(normalAtl, 3, gl.FLOAT, false, 0,0)
-
-    const uniformColor = gl.getUniformLocation(program, "u_color")
-    const lightReverseDirection = gl.getUniformLocation(program, "u_reverseLightDirection")
-
-    gl.uniform4fv(uniformColor, colorArr)
-    const lightDirection = [0.8, 0.9, 1];
-    gl.uniform3fv(lightReverseDirection, normalize(lightDirection))
-
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    const colorLoc = gl.getAttribLocation(program, "a_color")
+    gl.enableVertexAttribArray(colorLoc)
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+    gl.vertexAttribPointer(colorLoc, 3, gl.UNSIGNED_BYTE, true, 0, 0)
+   
     const mat = new MatrixEngine()
     mat.generate(projectionMode, prespectiveProp)
-    mat.translate(trans[0], trans[1], trans[2])
-    mat.rotate(rotate[0], rotate[1], rotate[2])
-    mat.scale(scale[0], scale[1], scale[2])
+    mat.translate(translation[0], translation[1], translation[2])
+    mat.rotate(rotation[0], rotation[1], rotation[2])
+    mat.scale(scaling[0], scaling[1], scaling[2])
     gl.uniformMatrix4fv(matrixLocation, false, mat.getMatrix());
 
-    let count = positions.length/3;
+    let count = 16*6;
     gl.drawArrays(gl.TRIANGLES, 0, count);
 }
 
@@ -175,14 +169,13 @@ function MatrixEngine () {
         if(mode=="prespective"){
             const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
             const f = Math.tan(Math.PI * 0.5 - 0.5 * this._degreeToRad2(prop.fov))
-            console.log("ppv",f)
             const rangeInv = 1.0/(1-2000)
-            this.matrix[0] = f / aspect
-            this.matrix[5] = f
-            this.matrix[10] = (1 + 2000)  *rangeInv
-            this.matrix[14] = 2000 * 1 * rangeInv * 2
-            this.matrix[11] = -1
-            console.log("hmmbz",this.matrix)
+            this.matrix = [
+                f / aspect, 0, 0, 0,
+                0, f, 0, 0,
+                0, 0, (1 + 2000) * rangeInv, -1,
+                0, 0, 2000 * 1 * rangeInv * 2, 0
+            ]
         }else if (mode=="oblique") {
 
         }else{

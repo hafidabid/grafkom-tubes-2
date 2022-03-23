@@ -19,55 +19,55 @@ let scaling = [x_scaling.value, y_scaling.value, z_scaling.value];
 x_translation.oninput = function(){
     this.nextElementSibling.value = this.value;
     translation[0] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 y_translation.oninput = function(){
     this.nextElementSibling.value = this.value;
     translation[1] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 z_translation.oninput = function(){
     this.nextElementSibling.value = this.value;
     translation[2] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 x_rotation.oninput = function(){
     this.nextElementSibling.value = this.value;
     rotation[0] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 y_rotation.oninput = function(){
     this.nextElementSibling.value = this.value;
     rotation[1] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 z_rotation.oninput = function(){
     this.nextElementSibling.value = this.value;
     rotation[2] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 x_scaling.oninput = function(){
     this.nextElementSibling.value = this.value;
     scaling[0] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)   
+    renderEngine()   
 }
 
 y_scaling.oninput = function(){
     this.nextElementSibling.value = this.value;
     scaling[1] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 z_scaling.oninput = function(){
     this.nextElementSibling.value = this.value;
     scaling[2] = this.value;
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 const selectMode = document.getElementById("modeselection")
@@ -81,7 +81,7 @@ selectMode.onchange = function(e) {
         prespectiveDiv[0].style.visibility="hidden"
     }
     projectionMode = e.target.value
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 const fovScale = document.getElementById("fov-scale")
@@ -92,7 +92,7 @@ let prespectiveProp = {
 fovScale.oninput = function() {
     this.nextElementSibling.value = this.value
     prespectiveProp.fov = this.value
-    renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling)
+    renderEngine()
 }
 
 
