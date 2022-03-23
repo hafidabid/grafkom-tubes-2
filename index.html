@@ -7,7 +7,7 @@
     <title>WebGL</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <script src="const.js" defer></script>
-    <script src="object2.js" defer></script>
+    <script src="object.js" defer></script>
     <script src="inversemat.js" defer></script>
     <script src="matrix.js" defer></script>
     <script src="engine.js" defer></script>
@@ -97,7 +97,8 @@
                 </div>
             </div>
 
-            <input type="file" value="inputFile" id="inputFile" onclick="readfile()" name="inputFile">
+            <input type="file" value="inputFile" id="inputFile" name="inputFile">
+            <button onclick="readfile()" >Proceed File</button>
             <button onclick="resetButton()">reset to default</button>
         </div>
         <canvas id="canvas" width="750" height="750"></canvas>
