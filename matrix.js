@@ -45,7 +45,7 @@ function MatrixEngine () {
                 0, 0, (1 + 2000) * rangeInv, -1,
                 0, 0, 2000 * 1 * rangeInv * 2, 0
             ]
-            console.log("presp", this.matrix)
+            //console.log("presp", this.matrix)
         }else if (mode=="oblique") {
             const s = 0.5*Math.sin(prop.obangel)
             const c = 0.5*Math.cos(prop.obangel)
@@ -65,7 +65,7 @@ function MatrixEngine () {
     
     this._multiplyMatrix = (mat1, mat2)=>{
         const mtemp = this._retMultiplyMatrix(mat1,mat2)
-        console.log("mtmp", mat2, mat1, mtemp)
+        //console.log("mtmp", mat2, mat1, mtemp)
         for(let i=0;i<16;i++){
             this.matrix[i] = mtemp[i]
         }
@@ -176,7 +176,7 @@ function MatrixEngine () {
         
         // camMat = this._lookAt(camPos, fpos, up)
         const viewMat = this._inverse(camMat)
-        console.log("cammat", viewMat)
+        //console.log("cammat", viewMat)
         this._multiplyMatrix(this.matrix, viewMat)
     }
 

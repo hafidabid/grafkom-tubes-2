@@ -79,7 +79,7 @@ function createProgram(gl, vertex, fragment){
         return program
     }
  
-    console.log(gl.getProgramInfoLog(program));
+    //console.log(gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
 }
 
@@ -94,7 +94,7 @@ function createShader(gl, type, source){
         return shader;
     }
  
-    console.log(gl.getShaderInfoLog(shader));
+    //console.log(gl.getShaderInfoLog(shader));
     gl.deleteShader(shader);
 }
 function resizeCanvas(canvas){
