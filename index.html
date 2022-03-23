@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGL</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
-    <script src="objdata2.js" defer></script>
+    <script src="const.js" defer></script>
+    <script src="object.js" defer></script>
+    <script src="inversemat.js" defer></script>
+    <script src="matrix.js" defer></script>
     <script src="engine.js" defer></script>
     <script src="script.js" defer></script>
 </head>
@@ -17,17 +20,17 @@
                 <p>Translasi objek</p>
                 <div class="slider">
                     <label for="x-translation">x</label>
-                    <input type="range" min=0 max=750 step=0.001 value=45 name="x-translation" id="x-translation">
-                    <output>0</output>
+                    <input type="range" min="-750" max="750" step="0.001" value="45" name="x-translation" id="x-translation">
+                    <output>90</output>
                 </div>
                 <div class="slider">
                     <label for="y-translation">y</label>
-                    <input type="range" min=0 max=750 step=0.001 value=150 name="y-translation" id="y-translation">
-                    <output>0</output>
+                    <input type="range" min=-750 max=750 step=0.001 value=150 name="y-translation" id="y-translation">
+                    <output>150</output>
                 </div>
                 <div class="slider">
                     <label for="z-translation">z</label>
-                    <input type="range" min=0 max=750 step=0.001 value=0 name="z-translation" id="z-translation">
+                    <input type="range" min=-1000 max=750 step=0.001 value=0 name="z-translation" id="z-translation">
                     <output>0</output>
                 </div>
             </div>
@@ -36,17 +39,17 @@
                 <div class="slider">
                     <label for="x-rotation">x-axis</label>
                     <input type="range" min=0 max=360 value=70 name="x-rotation" id="x-rotation">
-                    <output>70</output>
+                    <output>40</output>
                 </div>
                 <div class="slider">
                     <label for="y-rotation">y-axis</label>
                     <input type="range" min=0 max=360 value=10 name="y-rotation" id="y-rotation">
-                    <output>10</output>
+                    <output>20</output>
                 </div>
                 <div class="slider">
                     <label for="z-rotation">z-axis</label>
                     <input type="range" min=0 max=360 value=0 name="z-rotation" id="z-rotation">
-                    <output>0</output>
+                    <output>325</output>
                 </div>
             </div>
             <div class="scaling">
@@ -84,12 +87,39 @@
                     <output>60</output>
                 </div>
             </div>
+            
+            <div class="oblique-slider">
+                <p>oblique</p>
+                <div class="slider">
+                    <label for="oblique-scale">cabinet angle</label>
+                    <input type="range" min=0 max=359 step=0.01 value=60 name="oblique-scale" id="oblique-scale">
+                    <output>63.4</output>
+                </div>
+            </div>
 
             <input type="file" value="inputFile" id="inputFile" onclick="readfile()" name="inputFile">
-            <button>reset to default</button>
+            <button onclick="resetButton()">reset to default</button>
         </div>
         <canvas id="canvas" width="750" height="750"></canvas>
-        
+        <div class="interactive-button">
+            <div class="translation">
+                <p>Kamera</p>
+                <div class="slider">
+                    <label for="cam-rotation">Camera rotation</label>
+                    <input type="range" min="-360" max="360" step="0.1" value="0" name="cam-rotation" id="cam-rotation">
+                    <output>0</output>
+                </div>
+                <div class="slider">
+                    <label for="cam-radius">Camera radius</label>
+                    <input type="range" min=1 max=300 step=0.1 value=200 name="cam-radius" id="cam-radius">
+                    <output>200</output>
+                </div>
+                <div class="slider">
+                    <label for="isshader">Not using shader?</label>
+                    <input type="checkbox" id="isshader" name="isshader" value="y">
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 </html>

@@ -1,100 +1,104 @@
+function init(){
+    gl = canvas.getContext("webgl")
+    if(!gl){
+        alert("error with init webgl")
+    }
 
-let projectionMode = document.getElementById("modeselection").value
-let x_translation = document.getElementById("x-translation");
-let y_translation = document.getElementById("y-translation");
-let z_translation = document.getElementById("z-translation");
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, shaderSource.vertex)
+    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, shaderSource.fragment)
+    program = createProgram(gl, vertexShader, fragmentShader)
 
-let x_rotation = document.getElementById("x-rotation");
-let y_rotation = document.getElementById("y-rotation");
-let z_rotation = document.getElementById("z-rotation");
+    posLoc = gl.getAttribLocation(program, "a_position")
+    clrLoc = gl.getAttribLocation(program, "a_color")
+    matLoc = gl.getUniformLocation(program, "u_matrix")
 
-let x_scaling = document.getElementById("x-scale");
-let y_scaling = document.getElementById("y-scale");
-let z_scaling = document.getElementById("z-scale");
+    posBuff = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuff)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW)
 
-let translation = [x_translation.value, y_translation.value, z_translation.value];
-let rotation = [x_rotation.value, y_rotation.value, z_rotation.value];
-let scaling = [x_scaling.value, y_scaling.value, z_scaling.value];
+    clrBuff = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, clrBuff)
+    gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors),gl.STATIC_DRAW)
 
-x_translation.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    translation[0] = this.value;
-    renderEngine()
+    gl.enable(gl.CULL_FACE)
+    gl.enable(gl.DEPTH_TEST)
+    renderEngine();
 }
 
-y_translation.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    translation[1] = this.value;
-    renderEngine()
+function sliderFactory(v,i){
+    return function(){
+        this.nextElementSibling.value = this.value;
+        v[i] = this.value;
+        renderEngine()
+    }
 }
 
-z_translation.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    translation[2] = this.value;
-    renderEngine()
-}
 
-x_rotation.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    rotation[0] = this.value;
-    renderEngine()
-}
 
-y_rotation.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    rotation[1] = this.value;
-    renderEngine()
-}
 
-z_rotation.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    rotation[2] = this.value;
-    renderEngine()
-}
-
-x_scaling.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    scaling[0] = this.value;
-    renderEngine()   
-}
-
-y_scaling.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    scaling[1] = this.value;
-    renderEngine()
-}
-
-z_scaling.oninput = function(){
-    this.nextElementSibling.value = this.value;
-    scaling[2] = this.value;
-    renderEngine()
-}
-
-const selectMode = document.getElementById("modeselection")
-const prespectiveDiv = document.getElementsByClassName("prespective-slider")
-prespectiveDiv[0].style.visibility="hidden"
-selectMode.onchange = function(e) {
+selectMode.onchange = (e) => {
     if(e.target.value == "prespective"){
         prespectiveDiv[0].style.visibility="visible"
         
     }else{
         prespectiveDiv[0].style.visibility="hidden"
     }
+
+    if(e.target.value == "oblique"){
+        obliqueDiv[0].style.visibility="visible"
+        
+    }else{
+        obliqueDiv[0].style.visibility="hidden"
+    }
     projectionMode = e.target.value
     renderEngine()
 }
 
-const fovScale = document.getElementById("fov-scale")
-let prespectiveProp = {
-    fov: 60
+
+init();
+xTranslation.oninput = sliderFactory(translation, 0)
+yTranslation.oninput = sliderFactory(translation, 1)
+zTranslation.oninput = sliderFactory(translation, 2)
+
+xRotation.oninput = sliderFactory(rotation, 0)
+yRotation.oninput = sliderFactory(rotation, 1)
+zRotation.oninput = sliderFactory(rotation, 2)
+
+xScaling.oninput = sliderFactory(scale,0)
+yScaling.oninput = sliderFactory(scale,1)
+zScaling.oninput = sliderFactory(scale,2)
+
+angleSlider.oninput = sliderFactory(cameraValue, 0)
+radiusSlider.oninput = sliderFactory(cameraValue,1)
+
+fovScale.oninput = sliderFactory(projAttr, "fov")
+obliqueScale.oninput = sliderFactory(projAttr, "obangel")
+
+isUsingShader.onchange = (e) => {
+    if(isUsingShader.checked){
+        alert("uraa")
+    }
 }
 
-fovScale.oninput = function() {
-    this.nextElementSibling.value = this.value
-    prespectiveProp.fov = this.value
+
+function resetButton(){
+    cameraValue[0] = 0
+    cameraValue[1] = 200
+
+    translation[0] = 90
+    translation[1] = 150
+    translation[2] = 0
+
+    rotation[0] = 40
+    rotation[1] = 25
+    rotation[2] = 325
+
+    scale[0] = 1
+    scale[1] = 1
+    scale[2] = 1
+
+    projectionMode = "orthograpic"
+    projAttr.fov = 60
+    projAttr.obangel = 63.4
     renderEngine()
 }
-
-
-
-initEngine()
