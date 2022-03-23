@@ -68,7 +68,24 @@
                 </div>
             </div>
 
-            <input type="file" value="inputFile" id="inputFile" name="inputFile">
+            <div>
+                <p>Mode</p>
+            <select id="modeselection">
+                <option value="orthograpic">orthograpic</option>
+                <option value="prespective">prespective</option>
+                <option value="oblique">oblique</option>
+            </select>
+            </div>
+            <div class="prespective-slider">
+                <p>prespective</p>
+                <div class="slider">
+                    <label for="fov-scale">field of view</label>
+                    <input type="range" min=1 max=179 step=0.01 value=60 name="fov-scale" id="fov-scale">
+                    <output>60</output>
+                </div>
+            </div>
+
+            <input type="file" value="inputFile" id="inputFile" onclick="readfile()" name="inputFile">
             <button>reset to default</button>
         </div>
         <canvas id="canvas" width="750" height="750"></canvas>

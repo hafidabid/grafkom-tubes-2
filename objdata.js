@@ -845,4 +845,21 @@ const  normals = [
      0, 0, 1,
 ]
 
-const colors = [1, 0, 0.7058823529411764, 1]
+const colors = [1, 0.6, 0.7058823529411764, 1]
+
+
+//Loading file
+const readfile = ()=> {
+    var file = document.getElementById("inputFile").files[0]
+    var reader = new FileReader();
+    reader.onload = function(e){
+        
+
+        renderEngine(gl, program, normals, normalAttLoc, colors, translation, rotation, scaling, rotation)
+    }
+    
+    reader.readAsText(file);
+    if (!file) {
+        alert('Cannot proceed empty file')
+    }
+}
