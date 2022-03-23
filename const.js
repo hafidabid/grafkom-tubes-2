@@ -40,3 +40,12 @@ const projAttr = {
     "fov" : 60,
     "obangel" : 63.4
 }
+
+
+canvas.onclick = (e) => {
+    let px,py
+    const cv = canvas.getBoundingClientRect()
+    px =  e.clientX - cv.left
+    py = e.clientY - cv.top
+    console.log("mypos", px,py)
+}

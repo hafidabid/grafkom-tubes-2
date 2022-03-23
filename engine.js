@@ -145,5 +145,5 @@ function renderEngine(){
     gl.uniformMatrix4fv(matLoc, false, mat.getMatrix());
 
     var primitiveType = gl.TRIANGLES;
-    gl.drawArrays(gl.TRIANGLES, 0, 16*6);
+    gl.drawArrays(gl.TRIANGLES, 0, points.length/3);
 }
