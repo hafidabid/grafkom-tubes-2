@@ -26,15 +26,16 @@ const radiusSlider = document.getElementById("cam-radius")
 
 let canvas = document.getElementById("canvas");
 let gl, program, pointLoc, colorLoc, matrixLoc
-let posLoc, clrLoc, matLoc
-let posBuff, clrBuff
+let posLoc, clrLoc, matLoc, normLoc, uniClrLoc, rLightLoc
+let posBuff, clrBuff, normBuff
 
 const cameraValue = [0,200]
-
+let lightDirection = [0.8, 0.9, 1]
+let shaderMode = 1
 const translation = [90, 150, 0]
 const rotation = [40, 25, 325]
 const scale = [1,1,1]
-60
+
 const projAttr = {
     "fov" : 60,
     "obangel" : 63.4

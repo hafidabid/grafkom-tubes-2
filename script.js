@@ -4,21 +4,33 @@ function init(){
         alert("error with init webgl")
     }
 
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, shaderSource.vertex)
-    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, shaderSource.fragment)
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, 
+        shaderMode == 1? shaderSource.vertex : shaderSource["vertex-norm"])
+    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, 
+        shaderMode == 1? shaderSource.fragment : shaderSource["fragment-norm"])
     program = createProgram(gl, vertexShader, fragmentShader)
 
     posLoc = gl.getAttribLocation(program, "a_position")
     clrLoc = gl.getAttribLocation(program, "a_color")
     matLoc = gl.getUniformLocation(program, "u_matrix")
+    uniClrLoc = gl.getUniformLocation(program, "u_color");
+    rLightLoc = gl.getUniformLocation(program, "u_reverseLightDirection");
+    normLoc = gl.getAttribLocation(program, "a_normal")
 
     posBuff = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuff)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW)
 
-    clrBuff = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, clrBuff)
-    gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors),gl.STATIC_DRAW)
+    if(shaderMode == 1){
+        clrBuff = gl.createBuffer()
+        gl.bindBuffer(gl.ARRAY_BUFFER, clrBuff)
+        gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors),gl.STATIC_DRAW)
+    }else{
+        normBuff = gl.createBuffer()
+        gl.bindBuffer(gl.ARRAY_BUFFER, normBuff)
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW)
+
+    }
 
     gl.enable(gl.CULL_FACE)
     gl.enable(gl.DEPTH_TEST)
@@ -55,7 +67,7 @@ selectMode.onchange = (e) => {
 }
 
 
-init();
+init(colors);
 xTranslation.oninput = sliderFactory(translation, 0)
 yTranslation.oninput = sliderFactory(translation, 1)
 zTranslation.oninput = sliderFactory(translation, 2)
@@ -76,8 +88,11 @@ obliqueScale.oninput = sliderFactory(projAttr, "obangel")
 
 isUsingShader.onchange = (e) => {
     if(isUsingShader.checked){
-        alert("uraa")
+        shaderMode = 2
+    }else{
+        shaderMode = 1
     }
+    init()
 }
 
 
