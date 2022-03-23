@@ -138,3 +138,14 @@ function resetButton(){
     isUsingShader.checked = false
     renderEngine()
 }
+
+const help_btn = document.getElementById("help-btn");
+const help_modal = document.getElementsByClassName("help-modal")[0];
+const help_close = document.getElementById("help-close-btn");
+
+help_btn.onclick = function() {
+    help_modal.style.display = "block";
+}
+help_close.onclick = function() {
+    help_modal.style.display = "none";
+}

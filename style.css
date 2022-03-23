@@ -14,11 +14,50 @@ main {
 
 .interactive-button{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-direction: column;
     height: 60vh;
     width: 20%;
     padding-left: 2em;
+}
+
+.help-button{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.help-modal{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: aquamarine;
+    width: 70vw;
+    height: 70vh;
+}
+
+#help-close-btn{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.help-description{
+    padding-top: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.help-description label {
+    font-size: large;
+    font-weight: 700;
+}
+
+.help-description p {
+    font-size: large;
+    padding-bottom: 25px;
 }
 
 canvas {
